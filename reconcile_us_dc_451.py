@@ -184,6 +184,9 @@ def compact_text(value: object) -> str:
 
 def normalize_country(value: object) -> str:
     normalized = compact_text(value)
+    normalized_without_the = " ".join(token for token in normalized.split() if token != "the")
+    if normalized_without_the in US_COUNTRY_ALIASES:
+        return "United States"
     return "United States" if normalized in US_COUNTRY_ALIASES else ascii_text(value)
 
 
@@ -214,6 +217,21 @@ def extract_postal(value: object) -> str:
     text = ascii_text(value)
     match = re.search(r"\b\d{5}(?:-\d{4})?\b", text)
     return match.group(0) if match else ""
+
+
+def extract_state_from_address(value: object) -> str:
+    text = compact_text(value)
+    tokens = text.split()
+    for position, token in enumerate(tokens):
+        if token in STATE_NAMES_BY_ABBR:
+            return token
+        if token in STATE_ABBREVIATIONS:
+            return STATE_ABBREVIATIONS[token]
+        for state_name, abbreviation in STATE_ABBREVIATIONS.items():
+            parts = state_name.split()
+            if tokens[position : position + len(parts)] == parts:
+                return abbreviation
+    return ""
 
 
 def to_float(value: object) -> float | None:
@@ -414,7 +432,7 @@ def load_dc_byte() -> pd.DataFrame:
             "facility_name_raw": raw["DC Name"],
             "street_address_raw": raw["Address"],
             "city_raw": raw["City"],
-            "state_raw": "",
+            "state_raw": raw["Address"].map(extract_state_from_address),
             "postal_code_raw": raw["Address"].map(extract_postal),
             "country_raw": raw["Country"],
             "latitude_raw": raw["Latitude"],
