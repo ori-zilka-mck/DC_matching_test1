@@ -220,13 +220,27 @@ def extract_postal(value: object) -> str:
 
 
 def extract_state_from_address(value: object) -> str:
-    text = compact_text(value)
-    tokens = text.split()
-    for position, token in enumerate(tokens):
-        if token in STATE_NAMES_BY_ABBR:
-            return token
-        if token in STATE_ABBREVIATIONS:
-            return STATE_ABBREVIATIONS[token]
+    text = ascii_text(value)
+    state_codes = "|".join(sorted(STATE_NAMES_BY_ABBR))
+    code_match = re.search(
+        rf"(?:,|\s)\s*({state_codes})\s+(?:\d{{5}}(?:-\d{{4}})?|usa|united states)\b",
+        text,
+        flags=re.IGNORECASE,
+    )
+    if code_match:
+        return code_match.group(1).lower()
+
+    code_match = re.search(
+        rf",\s*({state_codes})\s*(?:,|$)",
+        text,
+        flags=re.IGNORECASE,
+    )
+    if code_match:
+        return code_match.group(1).lower()
+
+    normalized = compact_text(value)
+    tokens = normalized.split()
+    for position in range(len(tokens)):
         for state_name, abbreviation in STATE_ABBREVIATIONS.items():
             parts = state_name.split()
             if tokens[position : position + len(parts)] == parts:
