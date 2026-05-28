@@ -469,6 +469,8 @@ def raw451_group_key(row: pd.Series) -> str:
 
 
 def aggregate_group(rows: pd.DataFrame, logical_id: str, dedupe_reason: str) -> dict[str, object]:
+    if "latitude" not in rows.columns or "longitude" not in rows.columns:
+        rows = add_normalized_fields(rows)
     lat_values = pd.to_numeric(rows["latitude"], errors="coerce").dropna()
     lon_values = pd.to_numeric(rows["longitude"], errors="coerce").dropna()
     company = join_unique(rows["company_raw"], limit=8)
