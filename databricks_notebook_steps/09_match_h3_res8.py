@@ -1,6 +1,6 @@
 # Databricks notebook source
 # MAGIC %md
-# MAGIC # Step 7 - Match DC Byte to client data within H3 resolution 8 cells
+# MAGIC # Step 9 - Match DC Byte to client data within H3 resolution 8 cells
 # MAGIC
 # MAGIC This repeats the H3 matching at resolution 8. Because res8 cells are
 # MAGIC larger than res9 cells, the text thresholds are stricter and country/city

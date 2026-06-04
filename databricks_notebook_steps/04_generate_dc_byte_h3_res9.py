@@ -1,8 +1,8 @@
 # Databricks notebook source
 # MAGIC %md
-# MAGIC # Step 2 - Generate DC Byte H3 resolution 9
+# MAGIC # Step 4 - Generate DC Byte H3 resolution 9
 # MAGIC
-# MAGIC This reads the standardized DC Byte table from step 1, rounds coordinates
+# MAGIC This reads the deduplicated DC Byte table from step 3, rounds coordinates
 # MAGIC to 3 decimal places, and creates an H3 resolution 9 cell for each valid
 # MAGIC latitude/longitude pair.
 
@@ -13,15 +13,15 @@ from pyspark.sql import functions as F
 # COMMAND ----------
 
 # TODO: update these table names before running.
-DC_BYTE_STANDARDIZED_TABLE = "TODO_CATALOG.TODO_SCHEMA.dc_byte_standardized"
+DC_BYTE_DEDUPED_TABLE = "TODO_CATALOG.TODO_SCHEMA.dc_byte_deduplicated"
 DC_BYTE_H3_RES9_TABLE = "TODO_CATALOG.TODO_SCHEMA.dc_byte_h3_res9"
 
 # COMMAND ----------
 
-if DC_BYTE_STANDARDIZED_TABLE.startswith("TODO_") or DC_BYTE_H3_RES9_TABLE.startswith("TODO_"):
-    raise ValueError("Update DC_BYTE_STANDARDIZED_TABLE and DC_BYTE_H3_RES9_TABLE before running.")
+if DC_BYTE_DEDUPED_TABLE.startswith("TODO_") or DC_BYTE_H3_RES9_TABLE.startswith("TODO_"):
+    raise ValueError("Update DC_BYTE_DEDUPED_TABLE and DC_BYTE_H3_RES9_TABLE before running.")
 
-dc_byte_df = spark.table(DC_BYTE_STANDARDIZED_TABLE)
+dc_byte_df = spark.table(DC_BYTE_DEDUPED_TABLE)
 
 dc_byte_h3_res9_df = (
     dc_byte_df.withColumn("lat_3dp", F.round(F.col("latitude").cast("double"), 3))

@@ -1,6 +1,6 @@
 # Databricks notebook source
 # MAGIC %md
-# MAGIC # Step 6 - Match DC Byte to client data within H3 resolution 9 cells
+# MAGIC # Step 8 - Match DC Byte to client data within H3 resolution 9 cells
 # MAGIC
 # MAGIC This matches every DC Byte record to every client record sharing the same
 # MAGIC H3 res9 cell, then validates candidates with fuzzy account name, location

@@ -1,8 +1,8 @@
 # Databricks notebook source
 # MAGIC %md
-# MAGIC # Step 4 - Generate H3 resolution 9 for client data
+# MAGIC # Step 6 - Generate H3 resolution 9 for client data
 # MAGIC
-# MAGIC This is the same idea as step 2, but for the future client table. Because
+# MAGIC This is the same idea as step 4, but for the future client table. Because
 # MAGIC the client table name and column names are not known yet, update the
 # MAGIC placeholders in the configuration cell before running.
 
